@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IELTS Word Master</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=Playfair+Display:ital,wght@0,700;1,500&display=swap" rel="stylesheet">
+  <style>
+:root {
+  --bg: #0a0a0b;
+  --surface: #141416;
+  --card: #1c1c1f;
+  --border: #2c2c30;
+  --green: #22c55e;
+  --blue: #60a5fa;
+  --amber: #fbbf24;
+  --red: #f87171;
+  --purple: #a78bfa;
+  --text: #f1f1f3;
+  --muted: #6b6b72;
+  --muted2: #2e2e33;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  min-height: 100vh;
+  padding: 16px;
+}
+#app { max-width: 460px; margin: 0 auto; }
+
+/* ── BUTTONS ── */
+.btn {
+  display: block; width: 100%; padding: 15px;
+  border-radius: 14px; border: none; cursor: pointer;
+  font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 600;
+  transition: opacity .15s, transform .1s;
+}
+.btn:active { transform: scale(0.98); }
+.btn-primary { background: var(--green); color: #000; }
+.btn-primary:hover { opacity: .9; }
+.btn-ghost { background: var(--card); color: var(--text); border: 1px solid var(--border); margin-top: 10px; }
+.btn-ghost:hover { border-color: var(--muted); }
+.back-btn {
+  background: var(--card); border: 1px solid var(--border); color: var(--text);
+  border-radius: 9px; padding: 8px 14px; font-size: 13px;
+  font-family: 'DM Sans', sans-serif; cursor: pointer; white-space: nowrap;
+}
+.icon-btn {
+  background: var(--muted2); border: none; border-radius: 9px;
+  padding: 9px 14px; color: var(--text); cursor: pointer; font-size: 13px;
+  font-family: 'DM Sans', sans-serif; font-weight: 500;
+  transition: background .15s;
+}
+.icon-btn:hover { background: var(--border); }
+.icon-btn.active { color: var(--amber); }
+
+/* ── HOME ── */
+.home-header { text-align: center; padding: 40px 0 28px; }
+.home-logo { font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: var(--green); font-weight: 600; margin-bottom: 10px; }
+.home-title { font-family: 'Playfair Display', serif; font-size: 34px; font-weight: 700; line-height: 1.1; }
+.home-sub { font-size: 14px; color: var(--muted); margin-top: 8px; }
+
+.stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 22px; }
+.stat-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 16px 18px; }
+.stat-label { font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin-bottom: 6px; }
+.stat-value { font-size: 30px; font-weight: 600; line-height: 1; }
+.c-green { color: var(--green); } .c-amber { color: var(--amber); } .c-blue { color: var(--blue); } .c-purple { color: var(--purple); }
+
+.section-label { font-size: 11px; text-transform: uppercase; letter-spacing: .1em; color: var(--muted); font-weight: 600; margin-bottom: 12px; }
+
+.sublist-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.sublist-name { font-size: 12px; color: var(--muted); width: 62px; flex-shrink: 0; }
+.pbar { flex: 1; height: 5px; background: var(--muted2); border-radius: 99px; overflow: hidden; }
+.pbar-fill { height: 100%; background: var(--green); border-radius: 99px; transition: width .6s ease; }
+.pbar-count { font-size: 12px; color: var(--muted); width: 38px; text-align: right; flex-shrink: 0; }
+
+.mode-row { display: flex; gap: 8px; margin-bottom: 14px; }
+.mode-btn {
+  flex: 1; padding: 10px; border-radius: 10px;
+  border: 1px solid var(--border); background: var(--card);
+  color: var(--muted); font-size: 13px; font-weight: 500;
+  font-family: 'DM Sans', sans-serif; cursor: pointer; transition: all .15s;
+}
+.mode-btn.on { border-color: var(--green); color: var(--green); background: rgba(34,197,94,.08); }
+
+.due-note { text-align: center; font-size: 13px; color: var(--muted); margin-top: 12px; }
+.due-note b { color: var(--amber); }
+
+/* ── STUDY HEADER ── */
+.study-hd {
+  display: flex; align-items: center; gap: 12px; padding: 16px 0 20px;
+}
+.spbar { flex: 1; height: 5px; background: var(--muted2); border-radius: 99px; overflow: hidden; }
+.spbar-fill { height: 100%; background: var(--green); border-radius: 99px; transition: width .35s ease; }
+.study-count { font-size: 13px; color: var(--muted); white-space: nowrap; min-width: 40px; text-align: right; }
+
+/* ── FLASHCARD ── */
+.card-wrap { perspective: 1200px; cursor: pointer; margin-bottom: 18px; }
+.card-inner {
+  position: relative; width: 100%; min-height: 340px;
+  transform-style: preserve-3d;
+  transition: transform .52s cubic-bezier(.4,0,.2,1);
+}
+.card-inner.flipped { transform: rotateY(180deg); }
+.card-face {
+  position: absolute; inset: 0;
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 22px; padding: 26px;
+  backface-visibility: hidden; -webkit-backface-visibility: hidden;
+  min-height: 340px; display: flex; flex-direction: column;
+}
+.card-back { transform: rotateY(180deg); }
+
+.card-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; }
+.badge { font-size: 11px; letter-spacing: .08em; padding: 4px 11px; border-radius: 99px; font-weight: 500; }
+.badge-type { border: 1px solid var(--border); color: var(--muted); text-transform: capitalize; }
+.badge-sub { background: rgba(34,197,94,.12); color: var(--green); }
+
+.card-word { font-family: 'Playfair Display', serif; font-size: 46px; font-weight: 700; line-height: 1.05; flex: 1; }
+.card-tap-hint { font-size: 12px; color: var(--muted); margin-top: 8px; }
+.card-btns { display: flex; gap: 8px; margin-top: 16px; }
+
+.card-def { font-size: 17px; line-height: 1.55; color: var(--text); margin-bottom: 14px; }
+.card-ex {
+  font-size: 13px; line-height: 1.65; color: var(--muted); font-style: italic;
+  padding-left: 12px; border-left: 2px solid var(--green); margin-bottom: 14px;
+}
+.syn-row { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+.syn-pill { font-size: 12px; padding: 3px 10px; border-radius: 99px; background: var(--muted2); color: var(--muted); }
+.col-text { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+/* ── RATING BUTTONS ── */
+.rating-row { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 8px; margin-bottom: 14px; }
+.rb {
+  padding: 12px 4px; border-radius: 11px;
+  border: 1px solid var(--border); background: var(--card);
+  color: var(--text); font-family: 'DM Sans', sans-serif;
+  font-size: 12px; font-weight: 600; cursor: pointer; text-align: center;
+  transition: all .15s;
+}
+.rb .d { display: block; font-size: 10px; color: var(--muted); font-weight: 400; margin-top: 2px; }
+.rb.again { border-color: rgba(248,113,113,.4); }
+.rb.again:hover { background: rgba(248,113,113,.1); color: var(--red); }
+.rb.hard  { border-color: rgba(251,191,36,.4); }
+.rb.hard:hover  { background: rgba(251,191,36,.1); color: var(--amber); }
+.rb.good  { border-color: rgba(96,165,250,.4); }
+.rb.good:hover  { background: rgba(96,165,250,.1); color: var(--blue); }
+.rb.easy  { border-color: rgba(34,197,94,.4); }
+.rb.easy:hover  { background: rgba(34,197,94,.1); color: var(--green); }
+.rating-hint { font-size: 12px; color: var(--muted); text-align: center; padding: 10px 0; }
+
+/* ── QUIZ ── */
+.quiz-card { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 26px; margin-bottom: 14px; }
+.quiz-meta { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 12px; }
+.quiz-q { font-size: 18px; line-height: 1.5; color: var(--text); margin-bottom: 6px; }
+.quiz-hint { font-size: 13px; color: var(--muted); }
+
+.quiz-opts { display: flex; flex-direction: column; gap: 10px; margin-bottom: 14px; }
+.qo {
+  padding: 14px 18px; border-radius: 13px; border: 1px solid var(--border);
+  background: var(--card); color: var(--text);
+  font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 500;
+  cursor: pointer; text-align: left; transition: all .15s;
+}
+.qo:hover:not(:disabled) { border-color: var(--muted); }
+.qo.correct { border-color: var(--green); background: rgba(34,197,94,.1); color: var(--green); }
+.qo.wrong   { border-color: var(--red);   background: rgba(248,113,113,.08); color: var(--red); }
+.qo:disabled { cursor: default; }
+
+.quiz-reveal { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 16px; margin-bottom: 12px; }
+.quiz-reveal-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 6px; }
+.quiz-reveal-ex { font-size: 14px; color: var(--muted); font-style: italic; line-height: 1.6; }
+
+/* ── BOOKMARKS ── */
+.bm-list { display: flex; flex-direction: column; gap: 10px; }
+.bm-item {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 14px; padding: 16px;
+  display: flex; justify-content: space-between; align-items: flex-start; gap: 12px;
+}
+.bm-word { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; }
+.bm-def { font-size: 13px; color: var(--muted); margin-top: 4px; line-height: 1.4; }
+
+/* ── RESULTS ── */
+.results { padding: 50px 0 20px; text-align: center; }
+.r-emoji { font-size: 60px; margin-bottom: 16px; }
+.r-title { font-family: 'Playfair Display', serif; font-size: 30px; font-weight: 700; margin-bottom: 6px; }
+.r-sub { font-size: 14px; color: var(--muted); margin-bottom: 32px; }
+.r-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 32px; }
+.r-stat { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 18px 8px; }
+.r-val { font-size: 28px; font-weight: 600; margin-bottom: 4px; }
+.r-lbl { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; }
+
+/* ── EMPTY ── */
+.empty { text-align: center; padding: 60px 20px; color: var(--muted); }
+.empty p { margin-top: 8px; font-size: 14px; line-height: 1.5; }
+
+/* ── TOAST ── */
+#toast {
+  position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px);
+  background: var(--card); border: 1px solid var(--border); border-radius: 10px;
+  padding: 10px 20px; font-size: 13px; color: var(--text);
+  transition: transform .3s ease; z-index: 999; white-space: nowrap;
+}
+#toast.show { transform: translateX(-50%) translateY(0); }
+  </style>
+</head>
+<body>
+<div id="app"></div>
+<div id="toast"></div>
+<script>
+// ══════════════════════════════════════════════════════
+// AWL WORD DATA  —  Sublists 1–3  (50 words)
+// ══════════════════════════════════════════════════════
+const WORDS = [
+  // ── SUBLIST 1 ──────────────────────────────────────
+  { id:1,  word:"analyse",      type:"verb",      sub:1,
+    def:"Examine something carefully in detail to understand or explain it",
+    ex:"Scientists analyse data from multiple studies to draw reliable conclusions.",
+    syn:["examine","investigate","study"], col:"analyse data · analyse results · analyse trends" },
+
+  { id:2,  word:"approach",     type:"noun/verb", sub:1,
+    def:"A way of dealing with a situation or achieving a goal",
+    ex:"This approach to language learning is highly effective for IELTS preparation.",
+    syn:["method","strategy","technique"], col:"take an approach · different approaches · new approach" },
+
+  { id:3,  word:"assess",       type:"verb",      sub:1,
+    def:"Evaluate or judge the quality, importance, or value of something",
+    ex:"Examiners assess your writing using four criteria: task, coherence, lexis, and grammar.",
+    syn:["evaluate","judge","measure"], col:"assess the impact · assess the situation · assess risk" },
+
+  { id:4,  word:"assume",       type:"verb",      sub:1,
+    def:"Suppose something to be the case without having proof of it",
+    ex:"We should not assume that all students learn at the same pace or in the same way.",
+    syn:["presume","suppose","take for granted"], col:"assume that · it is assumed · widely assumed" },
+
+  { id:5,  word:"authority",    type:"noun",      sub:1,
+    def:"The power or right to give orders, make decisions, or enforce rules",
+    ex:"The government has the authority to regulate international trade and commerce.",
+    syn:["power","control","jurisdiction"], col:"authority over · in authority · central authority" },
+
+  { id:6,  word:"benefit",      type:"noun/verb", sub:1,
+    def:"An advantage or positive outcome gained from something",
+    ex:"Regular reading has numerous benefits for developing IELTS Academic vocabulary.",
+    syn:["advantage","gain","profit"], col:"benefit from · potential benefits · mutual benefit" },
+
+  { id:7,  word:"concept",      type:"noun",      sub:1,
+    def:"An abstract idea or general notion fundamental to a field or theory",
+    ex:"The concept of spaced repetition is central to effective long-term memory training.",
+    syn:["idea","notion","principle"], col:"key concept · the concept of · abstract concept" },
+
+  { id:8,  word:"context",      type:"noun",      sub:1,
+    def:"The circumstances or setting that form the background of an event or statement",
+    ex:"Understanding words in context is crucial for achieving a high IELTS reading score.",
+    syn:["setting","background","circumstances"], col:"in context · out of context · historical context" },
+
+  { id:9,  word:"create",       type:"verb",      sub:1,
+    def:"Bring something into existence; produce something new",
+    ex:"Digital technology has created entirely new opportunities for global communication.",
+    syn:["produce","generate","develop"], col:"create opportunities · create problems · create a system" },
+
+  { id:10, word:"data",         type:"noun",      sub:1,
+    def:"Facts and statistics collected together for reference or analysis",
+    ex:"The data suggests a significant rise in global temperatures over the past century.",
+    syn:["information","figures","statistics"], col:"collect data · analyse data · data shows · raw data" },
+
+  { id:11, word:"define",       type:"verb",      sub:1,
+    def:"State the exact meaning of a word, concept, or the limits of something",
+    ex:"It is important to clearly define your key terms at the start of an academic essay.",
+    syn:["explain","describe","specify"], col:"define as · clearly defined · define the scope" },
+
+  { id:12, word:"derive",       type:"verb",      sub:1,
+    def:"Obtain something from a specified source; have as an origin",
+    ex:"Many English academic words derive from Latin or ancient Greek roots.",
+    syn:["obtain","originate","stem"], col:"derive from · derive benefit · derive a conclusion" },
+
+  { id:13, word:"economy",      type:"noun",      sub:1,
+    def:"The system of trade and industry by which the wealth of a country is produced",
+    ex:"The economy has grown significantly in many developing nations over the past two decades.",
+    syn:["financial system","market","trade"], col:"global economy · the economy grows · boost the economy" },
+
+  { id:14, word:"environment",  type:"noun",      sub:1,
+    def:"The surroundings or conditions in which a person, animal, or plant lives",
+    ex:"Climate change poses a serious and growing threat to the natural environment.",
+    syn:["surroundings","ecosystem","habitat"], col:"natural environment · protect the environment · work environment" },
+
+  { id:15, word:"establish",    type:"verb",      sub:1,
+    def:"Set up, create, or prove something firmly and permanently",
+    ex:"The study established a clear link between diet and the risk of heart disease.",
+    syn:["found","create","set up"], col:"establish a link · well-established · establish a fact" },
+
+  { id:16, word:"estimate",     type:"verb/noun", sub:1,
+    def:"Calculate or judge the value, number, or extent of something approximately",
+    ex:"Experts estimate that 40% of current jobs will be automated within 20 years.",
+    syn:["approximate","calculate","gauge"], col:"rough estimate · estimate that · conservative estimate" },
+
+  { id:17, word:"evidence",     type:"noun",      sub:1,
+    def:"Facts or information indicating whether something is true or valid",
+    ex:"There is strong scientific evidence that regular exercise improves mental health outcomes.",
+    syn:["proof","data","facts"], col:"evidence suggests · provide evidence · supporting evidence" },
+
+  { id:18, word:"factor",       type:"noun",      sub:1,
+    def:"A circumstance or element that contributes to producing a result",
+    ex:"Diet is considered one of the most significant factors in preventing chronic disease.",
+    syn:["element","aspect","component"], col:"key factor · contributing factor · risk factor" },
+
+  { id:19, word:"function",     type:"noun/verb", sub:1,
+    def:"The purpose or special duty of a person, thing, or system",
+    ex:"The primary function of vocabulary is to enable precise and effective communication.",
+    syn:["role","purpose","duty"], col:"function as · main function · serve a function" },
+
+  { id:20, word:"identify",     type:"verb",      sub:1,
+    def:"Establish or indicate who or what something is; recognise and name",
+    ex:"Researchers identified three key barriers to access in higher education worldwide.",
+    syn:["recognise","detect","pinpoint"], col:"identify problems · identify trends · identify as" },
+
+  // ── SUBLIST 2 ──────────────────────────────────────
+  { id:21, word:"achieve",      type:"verb",      sub:2,
+    def:"Successfully reach or accomplish a desired goal or result",
+    ex:"With consistent daily practice, students can achieve a band score of 7 or higher.",
+    syn:["attain","accomplish","reach"], col:"achieve a goal · achieve success · achieve balance" },
+
+  { id:22, word:"acquire",      type:"verb",      sub:2,
+    def:"Come to have or gain something over time",
+    ex:"Children acquire language naturally through exposure, interaction, and imitation.",
+    syn:["gain","obtain","learn"], col:"acquire knowledge · acquire skills · acquire language" },
+
+  { id:23, word:"affect",       type:"verb",      sub:2,
+    def:"Have an effect on; make a difference to something or someone",
+    ex:"High levels of chronic stress can significantly and negatively affect academic performance.",
+    syn:["impact","influence","alter"], col:"adversely affect · affect the outcome · directly affect" },
+
+  { id:24, word:"appropriate",  type:"adjective", sub:2,
+    def:"Suitable or proper in the given circumstances or for the purpose",
+    ex:"It is essential to use appropriate academic language when writing IELTS Task 2 essays.",
+    syn:["suitable","fitting","proper"], col:"appropriate for · appropriate level · deemed appropriate" },
+
+  { id:25, word:"aspect",       type:"noun",      sub:2,
+    def:"A particular part or feature of something; a way it may be viewed",
+    ex:"Grammar is just one aspect of the complex and multifaceted process of language learning.",
+    syn:["part","element","feature"], col:"key aspect · different aspects · every aspect of" },
+
+  { id:26, word:"assist",       type:"verb",      sub:2,
+    def:"Help someone to do something; make it easier to accomplish",
+    ex:"Flashcard apps assist learners in memorising academic vocabulary more effectively.",
+    syn:["help","support","aid"], col:"assist with · assist in · assist someone" },
+
+  { id:27, word:"category",     type:"noun",      sub:2,
+    def:"A class or group of people or things sharing particular characteristics",
+    ex:"IELTS vocabulary can be divided into categories based on topic, frequency, or type.",
+    syn:["class","group","type"], col:"fall into a category · main categories · broad category" },
+
+  { id:28, word:"complex",      type:"adjective", sub:2,
+    def:"Consisting of many connected parts; not easy to understand or analyse",
+    ex:"Academic texts often employ complex sentence structures that challenge reading comprehension.",
+    syn:["complicated","intricate","involved"], col:"highly complex · complex system · complex issue" },
+
+  { id:29, word:"contribute",   type:"verb",      sub:2,
+    def:"Give something—money, time, or effort—to help achieve or provide a result",
+    ex:"Renewable energy has contributed substantially to reducing global carbon emissions.",
+    syn:["add","give","provide"], col:"contribute to · make a contribution · significantly contribute" },
+
+  { id:30, word:"significant",  type:"adjective", sub:2,
+    def:"Important or notable; large enough to have a meaningful effect",
+    ex:"There has been a significant increase in the number of international students globally.",
+    syn:["notable","considerable","substantial"], col:"significant difference · statistically significant · play a significant role" },
+
+  // ── SUBLIST 3 ──────────────────────────────────────
+  { id:31, word:"alternative",  type:"noun/adj",  sub:3,
+    def:"A different option or choice available instead of something else",
+    ex:"Distance learning has emerged as a widely accepted alternative to traditional classroom study.",
+    syn:["option","choice","substitute"], col:"alternative approach · seek alternatives · viable alternative" },
+
+  { id:32, word:"circumstance", type:"noun",      sub:3,
+    def:"A fact or condition connected with or relevant to an event or situation",
+    ex:"In some circumstances, students from disadvantaged backgrounds struggle to access higher education.",
+    syn:["situation","condition","context"], col:"under the circumstances · exceptional circumstances · in certain circumstances" },
+
+  { id:33, word:"component",    type:"noun",      sub:3,
+    def:"A part or element that makes up a larger whole or system",
+    ex:"Listening, reading, writing, and speaking are the four key components of the IELTS exam.",
+    syn:["part","element","ingredient"], col:"key component · main components · critical component" },
+
+  { id:34, word:"consent",      type:"noun/verb", sub:3,
+    def:"Permission for something to happen; voluntary agreement to a course of action",
+    ex:"All research participants must provide informed consent before joining any scientific study.",
+    syn:["agreement","permission","approval"], col:"give consent · informed consent · withhold consent" },
+
+  { id:35, word:"considerable", type:"adjective", sub:3,
+    def:"Large in size, amount, or extent; worthy of significant attention",
+    ex:"There has been a considerable increase in global internet usage over the past decade.",
+    syn:["significant","substantial","large"], col:"considerable amount · considerable effort · a considerable number" },
+
+  { id:36, word:"constant",     type:"adjective", sub:3,
+    def:"Occurring continuously over a period of time; remaining the same throughout",
+    ex:"Constant and deliberate revision is essential for long-term vocabulary retention.",
+    syn:["continuous","steady","persistent"], col:"constant change · remain constant · constant pressure" },
+
+  { id:37, word:"document",     type:"verb/noun", sub:3,
+    def:"Record something in written, photographic, or digital form; an official record",
+    ex:"It is important to document all research findings thoroughly and systematically.",
+    syn:["record","report","register"], col:"document the process · official document · document findings" },
+
+  { id:38, word:"dominate",     type:"verb",      sub:3,
+    def:"Have a commanding influence over; be the most important or powerful element",
+    ex:"Fossil fuels continue to dominate the global energy market despite the growth of renewables.",
+    syn:["control","rule","govern"], col:"dominate the market · tend to dominate · dominated by" },
+
+  { id:39, word:"emphasis",     type:"noun",      sub:3,
+    def:"Special importance, value, or prominence given to something",
+    ex:"The IELTS examiner places great emphasis on the coherence and cohesion of your argument.",
+    syn:["stress","importance","priority"], col:"place emphasis on · strong emphasis · shift emphasis" },
+
+  { id:40, word:"ensure",       type:"verb",      sub:3,
+    def:"Make certain that something will happen or be the case",
+    ex:"Regular daily practice will help ensure that your vocabulary improves consistently over time.",
+    syn:["guarantee","make sure","secure"], col:"ensure that · ensure quality · ensure safety" },
+
+  { id:41, word:"indicate",     type:"verb",      sub:1,
+    def:"Point out, show, or suggest that something is the case",
+    ex:"The graph clearly indicates a steady rise in carbon emissions over the last 30 years.",
+    syn:["show","suggest","demonstrate"], col:"indicate that · results indicate · clearly indicate" },
+
+  { id:42, word:"involve",      type:"verb",      sub:1,
+    def:"Include or require something or someone as a necessary part",
+    ex:"The research process involves data collection, analysis, and critical interpretation of findings.",
+    syn:["include","require","entail"], col:"involve doing · what it involves · necessarily involves" },
+
+  { id:43, word:"major",        type:"adjective", sub:1,
+    def:"Important, serious, or significant; greater than others of its type",
+    ex:"Vocabulary is a major component of the overall IELTS band score calculation.",
+    syn:["significant","main","key"], col:"major factor · play a major role · major issue" },
+
+  { id:44, word:"method",       type:"noun",      sub:1,
+    def:"A particular procedure for accomplishing or approaching something",
+    ex:"The scientific method involves observation, hypothesis, experimentation, and controlled analysis.",
+    syn:["approach","technique","procedure"], col:"research method · effective method · traditional method" },
+
+  { id:45, word:"occur",        type:"verb",      sub:1,
+    def:"Happen; come to pass; be found to exist in a particular place",
+    ex:"Climate-related disasters occur more frequently as global temperatures continue to rise.",
+    syn:["happen","take place","arise"], col:"occur when · tend to occur · commonly occurs" },
+
+  { id:46, word:"policy",       type:"noun",      sub:1,
+    def:"A course of action adopted by a government, organisation, or individual",
+    ex:"Government policy on immigration has a direct and measurable impact on labour markets.",
+    syn:["plan","strategy","guidelines"], col:"government policy · policy on · implement a policy" },
+
+  { id:47, word:"principle",    type:"noun",      sub:1,
+    def:"A fundamental truth or proposition serving as the basis for belief or behaviour",
+    ex:"The principle of equal opportunity should apply to all citizens regardless of background.",
+    syn:["rule","law","standard"], col:"the principle of · on principle · core principle" },
+
+  { id:48, word:"require",      type:"verb",      sub:1,
+    def:"Need or depend on something for a particular purpose; make it necessary",
+    ex:"The IELTS Writing test requires candidates to present a well-structured and coherent argument.",
+    syn:["need","demand","necessitate"], col:"require that · as required · require attention" },
+
+  { id:49, word:"respond",      type:"verb",      sub:1,
+    def:"Say or do something in reply; react to a stimulus or situation",
+    ex:"Governments must respond quickly and decisively to environmental crises to prevent further damage.",
+    syn:["reply","react","answer"], col:"respond to · respond by · fail to respond" },
+
+  { id:50, word:"specific",     type:"adjective", sub:1,
+    def:"Clearly defined or identified; relating to a particular thing, not general",
+    ex:"The examiner expects specific examples to support each point made in your IELTS essay.",
+    syn:["particular","precise","exact"], col:"specific to · be specific · specific details" }
+];
+// ══════════════════════════════════════════════════════
+// SM-2 SPACED REPETITION ALGORITHM  (Anki-style)
+// quality: 1=again · 2=hard · 4=good · 5=easy
+// ══════════════════════════════════════════════════════
+
+function sm2(card, quality) {
+  let { interval = 0, repetitions = 0, efactor = 2.5 } = card;
+  if (quality >= 3) {
+    if      (repetitions === 0) interval = 1;
+    else if (repetitions === 1) interval = 6;
+    else                        interval = Math.round(interval * efactor);
+    repetitions++;
+  } else {
+    interval    = 1;
+    repetitions = 0;
+  }
+  efactor += 0.1 - (5 - quality) * (0.08 + (5 - quality) * 0.02);
+  if (efactor < 1.3) efactor = 1.3;
+  if (efactor > 3.0) efactor = 3.0;
+  const due = new Date();
+  due.setDate(due.getDate() + interval);
+  return { interval, repetitions, efactor, dueDate: due.toISOString(), seen: true };
+}
+
+function previewInterval(card, quality) {
+  return sm2(card || {}, quality).interval;
+}
+// ══════════════════════════════════════════════════════
+// STATE MANAGEMENT
+// ══════════════════════════════════════════════════════
+
+function loadState() {
+  try {
+    const s = localStorage.getItem('ielts_wm3');
+    if (s) return JSON.parse(s);
+  } catch(e) {}
+  return { cards: {}, bookmarks: [], streak: 0, lastDate: null, totalOk: 0, totalAll: 0 };
+}
+
+function saveState() {
+  localStorage.setItem('ielts_wm3', JSON.stringify(S));
+}
+
+let S = loadState();
+
+function getDue() {
+  const now = new Date();
+  return WORDS.filter(w => {
+    const c = S.cards[w.id];
+    if (!c || !c.seen) return true;
+    return new Date(c.dueDate) <= now;
+  });
+}
+
+function getMastered() {
+  return WORDS.filter(w => (S.cards[w.id] || {}).repetitions >= 4).length;
+}
+
+function subProgress(sub) {
+  const ws = WORDS.filter(w => w.sub === sub);
+  return { total: ws.length, seen: ws.filter(w => S.cards[w.id]?.seen).length };
+}
+
+function touchStreak() {
+  const today = new Date().toDateString();
+  if (S.lastDate === today) return;
+  const yest = new Date();
+  yest.setDate(yest.getDate() - 1);
+  S.streak = (S.lastDate === yest.toDateString()) ? S.streak + 1 : 1;
+  S.lastDate = today;
+}
+// ══════════════════════════════════════════════════════
+// SESSION STATE
+// ══════════════════════════════════════════════════════
+let screen    = 'home';
+let mode      = 'flip';   // 'flip' | 'quiz'
+let queue     = [];
+let qi        = 0;
+let flipped   = false;
+let answered  = false;
+let sessOk    = 0;
+let sessAll   = 0;
+let quizOpts  = null;
+let wrongWord = null;
+
+// ══════════════════════════════════════════════════════
+// HELPERS
+// ══════════════════════════════════════════════════════
+function speak(w) {
+  if (!window.speechSynthesis) return;
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(w);
+  u.lang = 'en-GB'; u.rate = 0.82;
+  speechSynthesis.speak(u);
+}
+
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 2200);
+}
+
+function toggleBm(id) {
+  const i = S.bookmarks.indexOf(id);
+  if (i >= 0) { S.bookmarks.splice(i, 1); toast('Removed from saved words'); }
+  else         { S.bookmarks.push(id);    toast('⭐ Word saved!'); }
+  saveState();
+  render();
+}
+
+function buildQuizOpts(word) {
+  const others = WORDS.filter(w => w.id !== word.id).sort(() => Math.random() - .5).slice(0, 3);
+  const opts = [...others.map(w => ({ label: w.word, correct: false })), { label: word.word, correct: true }];
+  return opts.sort(() => Math.random() - .5);
+}
+
+function rateCard(q) {
+  const word = queue[qi];
+  const prev = S.cards[word.id] || {};
+  S.cards[word.id] = sm2(prev, q);
+  if (q >= 3) { sessOk++; S.totalOk++; }
+  sessAll++; S.totalAll++;
+  saveState();
+  advance();
+}
+
+function advance() {
+  qi++; flipped = false; answered = false; quizOpts = null; wrongWord = null;
+  if (qi >= queue.length) screen = 'results';
+  render();
+}
+
+function startStudy() {
+  let due = getDue();
+  if (due.length === 0) due = [...WORDS].sort(() => Math.random() - .5).slice(0, 20);
+  queue = due.sort(() => Math.random() - .5);
+  qi = 0; flipped = false; answered = false; quizOpts = null; wrongWord = null;
+  sessOk = 0; sessAll = 0;
+  touchStreak();
+  screen = 'study';
+  render();
+}
+
+// ══════════════════════════════════════════════════════
+// RENDER
+// ══════════════════════════════════════════════════════
+function render() {
+  document.getElementById('app').innerHTML =
+    screen === 'home'      ? renderHome()      :
+    screen === 'study'     ? renderStudy()     :
+    screen === 'results'   ? renderResults()   :
+    screen === 'bookmarks' ? renderBookmarks() : '';
+}
+
+// ── HOME ──────────────────────────────────────────────
+function renderHome() {
+  const due      = getDue().length;
+  const mastered = getMastered();
+  const acc      = S.totalAll > 0 ? Math.round((S.totalOk / S.totalAll) * 100) : 0;
+  const sl1 = subProgress(1), sl2 = subProgress(2), sl3 = subProgress(3);
+
+  return `
+    <div class="home-header">
+      <div class="home-logo">IELTS Word Master</div>
+      <h1 class="home-title">Build Your<br>Band Score</h1>
+      <p class="home-sub">AWL · 50 Academic Words · SM-2 Algorithm</p>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-label">🔥 Streak</div>
+        <div class="stat-value c-amber">${S.streak} <span style="font-size:14px;color:var(--muted)">days</span></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">✅ Mastered</div>
+        <div class="stat-value c-green">${mastered} <span style="font-size:14px;color:var(--muted)">/ ${WORDS.length}</span></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">📊 Accuracy</div>
+        <div class="stat-value c-blue">${acc}<span style="font-size:16px">%</span></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">📅 Due Today</div>
+        <div class="stat-value ${due > 0 ? 'c-amber' : ''}">${due}</div>
+      </div>
+    </div>
+
+    <div class="section-label" style="margin-bottom:14px">AWL Sublist Progress</div>
+    <div style="margin-bottom:22px">
+      ${[{s:sl1,n:1},{s:sl2,n:2},{s:sl3,n:3}].map(({s,n}) => `
+        <div class="sublist-row">
+          <div class="sublist-name">SL ${n}</div>
+          <div class="pbar"><div class="pbar-fill" style="width:${s.total ? Math.round(s.seen / s.total * 100) : 0}%"></div></div>
+          <div class="pbar-count">${s.seen}/${s.total}</div>
+        </div>
+      `).join('')}
+    </div>
+
+    <div class="section-label" style="margin-bottom:10px">Study Mode</div>
+    <div class="mode-row">
+      <button class="mode-btn ${mode === 'flip' ? 'on' : ''}" onclick="mode='flip';render()">🃏 Flashcard</button>
+      <button class="mode-btn ${mode === 'quiz' ? 'on' : ''}" onclick="mode='quiz';render()">🧠 Quiz (MCQ)</button>
+    </div>
+
+    <button class="btn btn-primary" onclick="startStudy()">
+      ${due > 0 ? `▶ Study ${due} Due Card${due !== 1 ? 's' : ''}` : '▶ Review All Words'}
+    </button>
+    <button class="btn btn-ghost" onclick="screen='bookmarks';render()">
+      ⭐ Saved Words — ${S.bookmarks.length} saved
+    </button>
+
+    <div class="due-note" style="margin-top:14px">
+      Total reviewed: <b>${S.totalAll}</b> · ${WORDS.length} words in deck
+    </div>
+  `;
+}
+
+// ── STUDY ─────────────────────────────────────────────
+function renderStudy() {
+  if (qi >= queue.length) { screen = 'results'; return renderResults(); }
+  const word = queue[qi];
+  const pct  = queue.length ? Math.round(qi / queue.length * 100) : 0;
+
+  return `
+    <div class="study-hd">
+      <button class="back-btn" onclick="screen='home';render()">← Back</button>
+      <div class="spbar"><div class="spbar-fill" style="width:${pct}%"></div></div>
+      <div class="study-count">${qi + 1}/${queue.length}</div>
+    </div>
+    ${mode === 'flip' ? renderFlip(word) : renderQuiz(word)}
+  `;
+}
+
+function renderFlip(word) {
+  const bm  = S.bookmarks.includes(word.id);
+  const cd  = S.cards[word.id] || {};
+  const ints = [1, 2, 4, 5].map(q => previewInterval(cd, q));
+
+  const front = `
+    <div class="card-face">
+      <div class="card-top">
+        <span class="badge badge-type">${word.type}</span>
+        <span class="badge badge-sub">AWL ${word.sub}</span>
+      </div>
+      <div class="card-word">${word.word}</div>
+      <div class="card-tap-hint">Tap card to reveal definition</div>
+      <div class="card-btns">
+        <button class="icon-btn" onclick="event.stopPropagation();speak('${word.word.replace(/'/g, "\\'")}')">🔊 Pronounce</button>
+        <button class="icon-btn ${bm ? 'active' : ''}" onclick="event.stopPropagation();toggleBm(${word.id})">${bm ? '⭐ Saved' : '☆ Save'}</button>
+      </div>
+    </div>`;
+
+  const back = `
+    <div class="card-face card-back">
+      <div class="card-top">
+        <span style="font-family:'Playfair Display',serif;font-size:22px;font-weight:700">${word.word}</span>
+        <span class="badge badge-sub">AWL ${word.sub}</span>
+      </div>
+      <div class="card-def">${word.def}</div>
+      <div class="card-ex">"${word.ex}"</div>
+      <div class="section-label">Synonyms</div>
+      <div class="syn-row">${word.syn.map(s => `<span class="syn-pill">${s}</span>`).join('')}</div>
+      <div class="section-label" style="margin-top:10px">Collocations</div>
+      <div class="col-text">${word.col}</div>
+    </div>`;
+
+  const ratings = flipped ? `
+    <div class="rating-row">
+      <button class="rb again" onclick="rateCard(1)">Again<span class="d">${ints[0]}d</span></button>
+      <button class="rb hard"  onclick="rateCard(2)">Hard<span class="d">${ints[1]}d</span></button>
+      <button class="rb good"  onclick="rateCard(4)">Good<span class="d">${ints[2]}d</span></button>
+      <button class="rb easy"  onclick="rateCard(5)">Easy<span class="d">${ints[3]}d</span></button>
+    </div>` : `<div class="rating-hint">Reveal the card, then rate how well you knew it</div>`;
+
+  return `
+    <div class="card-wrap" onclick="flipCard()">
+      <div class="card-inner ${flipped ? 'flipped' : ''}">${front}${back}</div>
+    </div>
+    ${ratings}`;
+}
+
+function renderQuiz(word) {
+  if (!quizOpts) quizOpts = buildQuizOpts(word);
+
+  const optHtml = quizOpts.map((o) => {
+    let cls = 'qo';
+    let dis = '';
+    if (answered) {
+      dis = 'disabled';
+      if (o.label === word.word)      cls += ' correct';
+      else if (o.label === wrongWord) cls += ' wrong';
+    }
+    const click = answered ? '' : `onclick="answerQuiz(${o.correct},'${o.label.replace(/'/g, "\\'")}',${word.id})"`;
+    return `<button class="${cls}" ${dis} ${click}>${o.label}</button>`;
+  }).join('');
+
+  return `
+    <div class="quiz-card">
+      <div class="quiz-meta">AWL Sublist ${word.sub} · ${word.type}</div>
+      <div class="quiz-q">${word.def}</div>
+      <div class="quiz-hint">Which word matches this definition?</div>
+    </div>
+    <div class="quiz-opts">${optHtml}</div>
+    ${answered ? `
+      <div class="quiz-reveal">
+        <div class="quiz-reveal-label">Example sentence</div>
+        <div class="quiz-reveal-ex">"${word.ex}"</div>
+      </div>
+      <button class="btn btn-primary" onclick="advance()">Next →</button>
+    ` : ''}`;
+}
+
+// ── RESULTS ───────────────────────────────────────────
+function renderResults() {
+  const acc = sessAll > 0 ? Math.round(sessOk / sessAll * 100) : 0;
+  const [emoji, title] =
+    acc >= 90 ? ['🔥', 'Outstanding!'] :
+    acc >= 70 ? ['💪', 'Great work!']  :
+    acc >= 50 ? ['📚', 'Good effort!'] :
+               ['🤔', 'Keep going!'];
+
+  return `
+    <div class="results">
+      <div class="r-emoji">${emoji}</div>
+      <div class="r-title">${title}</div>
+      <div class="r-sub">Session complete · ${S.streak} day streak 🔥</div>
+      <div class="r-grid">
+        <div class="r-stat">
+          <div class="r-val c-green">${sessOk}</div>
+          <div class="r-lbl">Correct</div>
+        </div>
+        <div class="r-stat">
+          <div class="r-val c-amber">${sessAll - sessOk}</div>
+          <div class="r-lbl">Missed</div>
+        </div>
+        <div class="r-stat">
+          <div class="r-val">${acc}%</div>
+          <div class="r-lbl">Accuracy</div>
+        </div>
+      </div>
+      <button class="btn btn-primary" onclick="startStudy()">Study Again</button>
+      <button class="btn btn-ghost" onclick="screen='home';render()">← Back to Home</button>
+    </div>`;
+}
+
+// ── BOOKMARKS ─────────────────────────────────────────
+function renderBookmarks() {
+  const bms = WORDS.filter(w => S.bookmarks.includes(w.id));
+  return `
+    <div class="study-hd">
+      <button class="back-btn" onclick="screen='home';render()">← Back</button>
+      <div style="font-weight:600">⭐ Saved Words</div>
+      <div></div>
+    </div>
+    ${bms.length === 0 ? `
+      <div class="empty">
+        <div style="font-size:44px">☆</div>
+        <p>No saved words yet.<br>Tap ☆ on any flashcard to save a word here.</p>
+      </div>` : `
+      <div class="bm-list">
+        ${bms.map(w => `
+          <div class="bm-item">
+            <div>
+              <div class="bm-word">${w.word}</div>
+              <div class="bm-def">${w.def.slice(0, 70)}…</div>
+            </div>
+            <button class="icon-btn active" onclick="toggleBm(${w.id})" title="Remove">⭐</button>
+          </div>`).join('')}
+      </div>`}`;
+}
+
+// ══════════════════════════════════════════════════════
+// ACTIONS (called from inline onclick)
+// ══════════════════════════════════════════════════════
+function flipCard() {
+  flipped = !flipped;
+  render();
+}
+
+function answerQuiz(correct, label, wordId) {
+  if (answered) return;
+  answered  = true;
+  wrongWord = correct ? null : label;
+
+  const q    = correct ? 4 : 1;
+  const prev = S.cards[wordId] || {};
+  S.cards[wordId] = sm2(prev, q);
+
+  if (correct) { sessOk++; S.totalOk++; }
+  sessAll++; S.totalAll++;
+  saveState();
+  render();
+}
+
+// ══════════════════════════════════════════════════════
+render();
+</script>
+</body>
+</html>
